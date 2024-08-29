@@ -5,6 +5,8 @@ import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from "react-redux";
 import {  getFollowingUser, setUserId, setUserName } from '../redux/userSlice'
+import Spinner from '../utils/Spinner'
+
 
 
 
@@ -17,20 +19,24 @@ const Login = () => {
   const [password, setPassword] = useState("")
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false)
   
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     if (isLogin) {
       // login
       try {
-
+         
+         
         const res = await axios.post(`${USER_API_END_POINT}/login`, { email, password }, {
           headers: {
             'Content-Type': "application/json"
           }, withCredentials: true,
         });
+        setLoading(false);
+        
         if (res.data.success) {
           navigate("/")
           dispatch(setUserId(res?.data?.userId))
@@ -54,6 +60,7 @@ const Login = () => {
             'Content-Type': "application/json"
           }, withCredentials: true,
         });
+        setLoading(false);
         if (res.data.success) {
           // navigate("/")
           setIsLogin(true);
@@ -67,12 +74,13 @@ const Login = () => {
 
   }
 
-
+  
 
   const loginSignupHandler = () => {
     setIsLogin(!isLogin);
   }
-
+  
+ 
   
 
   return (
@@ -96,6 +104,11 @@ const Login = () => {
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email' className="outline-blue-500 border border-gray-800 px-4 py-2 rounded-full my-1 font-semibold" />
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' className="outline-blue-500 border border-gray-800 px-4 py-2 rounded-full my-1 font-semibold" />
             <button className='bg-[#1D9BF0] border-none py-2 my-4 rounded-full text-lg text-white'>{isLogin ? "Login" : "Create Account"}</button>
+            {
+              loading && <div className='z-50 absolute top-[10%] left-[50%]'>
+                <Spinner />
+              </div>
+            }
             <h1>{isLogin ? "Do not have an account?" : "Already have an account?"} <span onClick={loginSignupHandler} className='font-bold text-blue-600 cursor-pointer'>{isLogin ? "Signup" : "Login"}</span></h1>
           </form>
         </div>
