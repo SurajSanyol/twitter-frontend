@@ -27,6 +27,7 @@ const CreateTweet = () => {
 
     try {
       const res = await axios.post(`${TWEET_API_END_POINT}/createtweet`, formData, { withCredentials: true });
+      console.log(res);
       
       if (res.data.success) {
         toast.success(res.data.message);
@@ -87,7 +88,7 @@ const CreateTweet = () => {
                 <input id='file-upload' type='file' className='hidden' onChange={handleFileChange} />
               </label> */}
 
-            <form onSubmit={onSubmitHandler}  enctype="multipart/form-data" className='w-[100%]'>
+            <form onSubmit={onSubmitHandler} method='post' enctype="multipart/form-data" className='w-[100%]'>
               <label htmlFor='file-upload' className='cursor-pointer flex justify-between px-4 mt-3 '>
                 <CiImageOn className='text-[#1D9BF0]' />
                 <input  id='file-upload'  type='file' name='imageupload' className='hidden'  onChange={handleFileChange} />

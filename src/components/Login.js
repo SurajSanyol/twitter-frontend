@@ -29,13 +29,15 @@ const Login = () => {
       // login
       try {
          
-         
+        // console.log("this is Log ");
         const res = await axios.post(`${USER_API_END_POINT}/login`, { email, password }, {
           headers: {
             'Content-Type': "application/json"
           }, withCredentials: true,
         });
         setLoading(false);
+        
+        
         
         if (res.data.success) {
           navigate("/")
