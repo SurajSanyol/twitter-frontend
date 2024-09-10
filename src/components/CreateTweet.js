@@ -27,7 +27,7 @@ const CreateTweet = () => {
 
     try {
       const res = await axios.post(`${TWEET_API_END_POINT}/createtweet`, formData, { withCredentials: true });
-      console.log(res);
+      // console.log(res);
       
       if (res.data.success) {
         toast.success(res.data.message);

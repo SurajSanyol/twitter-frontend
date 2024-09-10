@@ -3,6 +3,8 @@
 export const USER_API_END_POINT = "https://twitter-backend-gw7n.onrender.com/api/v1/user";
 export const TWEET_API_END_POINT = "https://twitter-backend-gw7n.onrender.com/api/v1/tweet";
 
+
+
 export const parseTwitterDate = (tdate) => {
     // Parse the given date
     var system_date = new Date(Date.parse(tdate));
@@ -20,6 +22,8 @@ export const parseTwitterDate = (tdate) => {
     }
 
     var diff = Math.floor((user_date - system_date) / 1000);
+    var oneYear = 31536000; // Seconds in one year
+    var oneMonth = 2628000; // Approximate seconds in a month
 
     if (diff <= 1) {
         return "just now";
@@ -54,14 +58,29 @@ export const parseTwitterDate = (tdate) => {
     if (diff <= 777600) {
         return "1 week ago";
     }
-
-    // Return the date in IST format
-    return "on " + system_date.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+    
+    // If the difference is less than a year, calculate in months
+    if (diff <= oneYear) {
+        var monthsDiff = Math.floor(diff / oneMonth);
+        if (monthsDiff === 1) {
+            return "1 month ago";
+        }
+        return monthsDiff + " months ago";
+    }
+    
+    // If more than a year has passed, return in years
+    var yearsDiff = Math.floor(diff / oneYear);
+    if (yearsDiff === 1) {
+        return "1 year ago";
+    }
+    return yearsDiff + " years ago";
 }
 
+// To check if IE is used
 var K = function () {
     var a = navigator.userAgent;
     return {
         ie: a.match(/MSIE\s([^;]*)/)
     }
 }();
+
